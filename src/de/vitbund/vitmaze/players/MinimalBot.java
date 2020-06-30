@@ -2,6 +2,8 @@ package de.vitbund.vitmaze.players;
 
 import java.util.Scanner;
 
+import de.vitbund.vitmaze.players.Waypoint.WaypointType;
+
 /**
  * Klasse eines minimalen Bots für das VITMaze
  * @author Patrick.Stalljohann
@@ -14,6 +16,9 @@ public class MinimalBot {
 	 * Hauptmethode zum Ausführen des Bots
 	 * @param args
 	 */
+	
+	private Pathfinder pathfinder;
+	
 	public static void main(String[] args) {
 		// Scanner zum Auslesen der Standardeingabe, welche Initialisierungs- und Rundendaten liefert
 		Scanner input = new Scanner(System.in);
@@ -30,7 +35,6 @@ public class MinimalBot {
 		int startX = input.nextInt(); // X-Koordinate der Startposition dieses Player
 		int startY = input.nextInt(); // Y-Koordinate der Startposition dieses Players
 		input.nextLine(); // Beenden der zweiten Zeile
-
 		
 		// TURN (Wiederholung je Runde notwendig)
 		while(input.hasNext()) {
@@ -44,9 +48,15 @@ public class MinimalBot {
 	
 			// Debug Information ausgeben (optional möglich)
 			System.err.println("Ergebnis Vorrunde: " + lastActionsResult);
+			System.err.println("currentCellStatus: " + currentCellStatus);
+			System.err.println("northCellStatus: " + northCellStatus);
+			System.err.println("eastCellStatus: " + eastCellStatus);
+			System.err.println("southCellStatus: " + southCellStatus);
+			System.err.println("westCellStatus: " + westCellStatus);
+			
 			
 			// Rundenaktion ausgeben
-			System.out.println("go west");
+			System.out.println("go west");					
 		}
 		
 		// Eingabe schliessen (letzte Aktion)
