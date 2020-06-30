@@ -2,6 +2,7 @@ package de.vitbund.vitmaze.players;
 
 import java.util.Scanner;
 
+import de.vitbund.vitmaze.players.InputHandler.InputType;
 import de.vitbund.vitmaze.players.Waypoint.WaypointType;
 
 /**
@@ -17,50 +18,30 @@ public class MinimalBot {
 	 * @param args
 	 */
 	
-	private Pathfinder pathfinder;
+	private static InputHandler inputHandler;
+	private static Pathfinder pathfinder;
 	
 	public static void main(String[] args) {
-		// Scanner zum Auslesen der Standardeingabe, welche Initialisierungs- und Rundendaten liefert
-		Scanner input = new Scanner(System.in);
+		inputHandler = new InputHandler();
 
-
-		// INIT - Auslesen der Initialdaten
-		// 1. Zeile: Maze Infos
-		int sizeX = input.nextInt(); // X-Groesse des Spielfeldes (Breite)
-		int sizeY = input.nextInt(); // Y-Groesse des Spielfeldes (Hoehe)
-		int level = input.nextInt(); // Level des Matches
-		input.nextLine(); // Beenden der ersten Zeile
-		// 2. Zeile: Player Infos
-		int playerId = input.nextInt(); // id dieses Players / Bots
-		int startX = input.nextInt(); // X-Koordinate der Startposition dieses Player
-		int startY = input.nextInt(); // Y-Koordinate der Startposition dieses Players
-		input.nextLine(); // Beenden der zweiten Zeile
+		System.err.println("PlayerID: " + inputHandler.playerId);
 		
 		// TURN (Wiederholung je Runde notwendig)
-		while(input.hasNext()) {
-			// Rundeninformationen auslesen
-			String lastActionsResult = input.nextLine();
-			String currentCellStatus = input.nextLine();
-			String northCellStatus = input.nextLine();
-			String eastCellStatus = input.nextLine();
-			String southCellStatus = input.nextLine();
-			String westCellStatus = input.nextLine();
-	
+		while(inputHandler.update()) {
 			// Debug Information ausgeben (optional möglich)
-			System.err.println("Ergebnis Vorrunde: " + lastActionsResult);
-			System.err.println("currentCellStatus: " + currentCellStatus);
-			System.err.println("northCellStatus: " + northCellStatus);
-			System.err.println("eastCellStatus: " + eastCellStatus);
-			System.err.println("southCellStatus: " + southCellStatus);
-			System.err.println("westCellStatus: " + westCellStatus);
-			
+			System.err.println("Ergebnis Vorrunde: " + inputHandler.getInputOf(InputType.lastActionsResult));
+			System.err.println("currentCellStatus: " + inputHandler.getInputOf(InputType.currentCellStatus));
+			System.err.println("northCellStatus: " + inputHandler.getInputOf(InputType.northCellStatus));
+			System.err.println("eastCellStatus: " + inputHandler.getInputOf(InputType.eastCellStatus));
+			System.err.println("southCellStatus: " + inputHandler.getInputOf(InputType.southCellStatus));
+			System.err.println("westCellStatus: " + inputHandler.getInputOf(InputType.westCellStatus));
 			
 			// Rundenaktion ausgeben
 			System.out.println("go west");					
 		}
 		
 		// Eingabe schliessen (letzte Aktion)
-		input.close();
+		inputHandler.close();
 	}
 
 }
