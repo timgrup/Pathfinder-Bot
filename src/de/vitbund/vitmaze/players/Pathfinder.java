@@ -21,8 +21,11 @@ public class Pathfinder {
 	public void exploreNeighbours() {
 		for (Direction direction : Direction.values()) {
 			Waypoint cell = new Waypoint(inputHandler.getInputOf(InputHandler.directionToInput(direction)));
-			
-			world.addWaypoint(Vector2.AddUp(player.getPosition(), Vector2.directionToVector(direction)), cell);
+			Vector2 pos = Vector2.AddUp(player.getPosition(), Vector2.directionToVector(direction));
+					
+			if(!world.containsKey(pos)) {
+				world.addWaypoint(pos, cell);
+			}
 		}
 	}
 }

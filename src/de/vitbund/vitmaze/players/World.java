@@ -15,5 +15,9 @@ public class World {
 	public void addWaypoint(Vector2 pos, Waypoint waypoint) {
 		worldMap.put(pos, waypoint);
 	}
+	
+	public boolean containsKey(Vector2 pos) {
+		return worldMap.containsKey(pos);
+	}
 
 }
