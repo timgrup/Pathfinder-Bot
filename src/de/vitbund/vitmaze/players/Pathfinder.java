@@ -22,7 +22,7 @@ public class Pathfinder {
 		for (Direction direction : Direction.values()) {
 			Waypoint cell = new Waypoint(inputHandler.getInputOf(InputHandler.directionToInput(direction)));
 			
-			world.addWaypoint(player.getPosition().AddUp(Vector2.directionToVector(direction)), cell);
+			world.addWaypoint(Vector2.AddUp(player.getPosition(), Vector2.directionToVector(direction)), cell);
 		}
 	}
 }

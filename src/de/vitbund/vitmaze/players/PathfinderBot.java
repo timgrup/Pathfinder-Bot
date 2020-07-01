@@ -38,9 +38,13 @@ public class PathfinderBot {
 			
 			pathfinder.exploreNeighbours();
 			
+			System.err.println(world.worldMap.size());
+			
+			/*
 			for (HashMap.Entry<Vector2, Waypoint> entry : world.worldMap.entrySet()) {
 			    System.err.println(entry.getKey().toString() + "/" + entry.getValue().waypointType.toString());
 			}
+			*/
 			
 			// Rundenaktion ausgeben
 			player.move(Direction.WEST);
