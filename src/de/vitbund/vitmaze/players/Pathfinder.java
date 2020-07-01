@@ -2,11 +2,27 @@ package de.vitbund.vitmaze.players;
 
 import java.util.*;
 
+import de.vitbund.vitmaze.players.InputHandler.InputType;
+import de.vitbund.vitmaze.players.Vector2.Direction;
+
 public class Pathfinder {
 
-	public Map<Vector2, Waypoint> path = new HashMap<Vector2, Waypoint>();
-	
-	public Pathfinder(Vector2 startPos, Waypoint startWaypoint) {
-		path.put(startPos, startWaypoint);
+	private InputHandler inputHandler;
+	private World world;
+	private Player player;
+	private Queue<Waypoint> waypoints;
+
+	public Pathfinder() {
+		this.inputHandler = PathfinderBot.inputHandler;
+		this.world = PathfinderBot.world;
+		this.player = PathfinderBot.player;
+	}
+
+	public void exploreNeighbours() {
+		for (Direction direction : Direction.values()) {
+			Waypoint cell = new Waypoint(inputHandler.getInputOf(InputHandler.directionToInput(direction)));
+			
+			world.addWaypoint(player.getPosition().AddUp(Vector2.directionToVector(direction)), cell);
+		}
 	}
 }

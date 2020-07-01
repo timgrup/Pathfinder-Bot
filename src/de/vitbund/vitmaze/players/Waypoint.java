@@ -5,7 +5,7 @@ public class Waypoint {
 	
 	enum WaypointType
 	{
-	   FLOOR, WALL, FINISH;
+	   FLOOR, WALL, FINISH, FORM;
 	}
 	
 	public WaypointType waypointType;
@@ -20,6 +20,7 @@ public class Waypoint {
 		case "FLOOR": return WaypointType.FLOOR;
 		case "WALL": return WaypointType.WALL;
 		case "FINISH": return WaypointType.FINISH;
+		case "FORM": return WaypointType.FORM;
 		default: return null;
 		}
 	}
