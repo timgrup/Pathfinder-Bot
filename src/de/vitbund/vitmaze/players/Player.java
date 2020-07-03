@@ -8,24 +8,58 @@ public class Player {
 	private int id;
 	private Vector2 startPos;
 	private Vector2 position;
+	private Direction lastMove;
 
 	public void move(Direction moveDirection) {
 		switch (moveDirection) {
 		case NORTH:
-			System.out.println("go north");
+			goNorth();
 			break;
 		case EAST:
-			System.out.println("go east");
+			goEast();
 			break;
 		case SOUTH:
-			System.out.println("go south");
+			goSouth();
 			break;
 		case WEST:
-			System.out.println("go west");
+			goWest();
 			break;
 		default:
 			break;
 		}
+
+		System.err.println("!! " + PathfinderBot.inputHandler.getLastActionResult());
+		System.err.println("Player Position: " + position.toString());
+	}
+
+	public void updatePosition() {
+		if (lastMove != null) {
+			boolean moved = ActionHandler.moveSuccess(lastMove);
+			System.err.println(moved);
+			if (moved) {
+				position = position.AddUp(position, Vector2.directionToVector(lastMove));
+			}
+		}
+	}
+
+	private void goNorth() {
+		System.out.println("go north");
+		lastMove = Direction.NORTH;
+	}
+
+	private void goEast() {
+		System.out.println("go east");
+		lastMove = Direction.EAST;
+	}
+
+	private void goSouth() {
+		System.out.println("go south");
+		lastMove = Direction.SOUTH;
+	}
+
+	private void goWest() {
+		System.out.println("go west");
+		lastMove = Direction.WEST;
 	}
 
 	// Getter & Setter
@@ -51,6 +85,21 @@ public class Player {
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
+	}
+
+	public static Direction revertDirection(Direction direction) {
+		switch (direction) {
+		case NORTH:
+			return Direction.SOUTH;
+		case EAST:
+			return Direction.WEST;
+		case SOUTH:
+			return Direction.NORTH;
+		case WEST:
+			return Direction.EAST;
+		default:
+			return null;
+		}
 	}
 
 }

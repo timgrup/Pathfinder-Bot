@@ -32,11 +32,13 @@ public class PathfinderBot {
 			
 			//Add Start Pos
 			if(world.worldMap.isEmpty()) {
-				Waypoint waypoint = new Waypoint(inputHandler.getInputOf(InputType.currentCellStatus));
+				Waypoint waypoint = new Waypoint(inputHandler.getInputOf(InputType.currentCellStatus), player.getStartPos());
 				world.addWaypoint(player.getStartPos(), waypoint);
 			}
+			player.updatePosition();
 			
 			pathfinder.exploreNeighbours();
+			pathfinder.move();
 			
 			System.err.println(world.worldMap.size());
 			
@@ -45,9 +47,6 @@ public class PathfinderBot {
 			    System.err.println(entry.getKey().toString() + "/" + entry.getValue().waypointType.toString());
 			}
 			*/
-			
-			// Rundenaktion ausgeben
-			player.move(Direction.WEST);
 		}
 		
 		// Eingabe schliessen (letzte Aktion)

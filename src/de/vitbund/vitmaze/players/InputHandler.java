@@ -12,9 +12,10 @@ public class InputHandler {
 	private Player player;
 	private Scanner input;
 	private Map<InputType, WaypointType> inputMap;
+	private String lastActionResult;
 
 	enum InputType {
-		lastActionsResult, currentCellStatus, northCellStatus, eastCellStatus, southCellStatus, westCellStatus;
+		currentCellStatus, northCellStatus, eastCellStatus, southCellStatus, westCellStatus;
 	}
 
 	public InputHandler(World world, Player player) {
@@ -48,7 +49,7 @@ public class InputHandler {
 	public boolean update() {
 		if (input.hasNext()) {
 			inputMap = new HashMap<>();
-			inputMap.put(InputType.lastActionsResult, Waypoint.GetType(input.nextLine()));
+			lastActionResult = input.nextLine();
 			inputMap.put(InputType.currentCellStatus, Waypoint.GetType(input.nextLine()));
 			inputMap.put(InputType.northCellStatus, Waypoint.GetType(input.nextLine()));
 			inputMap.put(InputType.eastCellStatus, Waypoint.GetType(input.nextLine()));
@@ -63,6 +64,10 @@ public class InputHandler {
 	public WaypointType getInputOf(InputType inputType) {
 		return inputMap.get(inputType);
 	}
+	
+	public String getLastActionResult() {
+		return this.lastActionResult;
+	}
 
 	public void close() {
 		input.close();
@@ -70,7 +75,7 @@ public class InputHandler {
 
 	public void printDebugInfo() {
 		// Print Debug Information
-		System.err.println("lastActionResult: " + this.getInputOf(InputType.lastActionsResult));
+		System.err.println("lastActionResult: " + this.lastActionResult);
 		System.err.println("currentCellStatus: " + this.getInputOf(InputType.currentCellStatus));
 		System.err.println("northCellStatus: " + this.getInputOf(InputType.northCellStatus));
 		System.err.println("eastCellStatus: " + this.getInputOf(InputType.eastCellStatus));

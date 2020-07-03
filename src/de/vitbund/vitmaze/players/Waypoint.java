@@ -1,5 +1,7 @@
 package de.vitbund.vitmaze.players;
 
+import de.vitbund.vitmaze.players.Vector2.Direction;
+
 public class Waypoint {
 	
 	
@@ -9,9 +11,13 @@ public class Waypoint {
 	}
 	
 	public WaypointType waypointType;
+	public Vector2 position;
+	public Vector2 explorerPos;
+	public Direction exploredByLooking;
 	
-	public Waypoint(WaypointType waypointType) {
+	public Waypoint(WaypointType waypointType, Vector2 pos) {
 		this.waypointType = waypointType;
+		this.position = pos;
 	}
 	
 	public static WaypointType GetType(String type) {
