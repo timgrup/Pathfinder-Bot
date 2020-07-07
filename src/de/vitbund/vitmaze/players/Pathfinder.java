@@ -12,6 +12,7 @@ public class Pathfinder {
 	private World world;
 	private Player player;
 	private Queue<Waypoint> waypointQ = new LinkedList<Waypoint>();
+	private List<Waypoint> wayToPoint = new ArrayList<Waypoint>();
 
 	public Pathfinder() {
 		this.inputHandler = PathfinderBot.inputHandler;
@@ -30,7 +31,7 @@ public class Pathfinder {
 			if (!world.containsKey(pos)) {
 				world.addWaypoint(pos, cell);
 
-				if (cell.waypointType.equals(WaypointType.FLOOR)) {
+				if (!cell.waypointType.equals(WaypointType.WALL)) {
 					waypointQ.add(cell);
 				}
 			}
@@ -40,12 +41,26 @@ public class Pathfinder {
 	public void move() {
 		boolean isStartPos = player.getPosition().equals(player.getStartPos());
 		System.err.println("Player is startpos: " + isStartPos);
-		if (!isStartPos) {
+		if (!isStartPos && wayToPoint.isEmpty()) {
 			player.move(Player.revertDirection(world.worldMap.get(player.getPosition()).exploredByLooking));
 		} else {
-			Waypoint waypoint = waypointQ.poll();
-			if (waypoint != null) {
-				player.move(waypoint.exploredByLooking);
+			if(wayToPoint.isEmpty()) {
+				wayToPoint = new ArrayList<Waypoint>();
+				Waypoint waypoint = waypointQ.poll();
+				if (waypoint != null) {
+					wayToPoint.add(waypoint);
+					while(!waypoint.explorerPos.equals(player.getStartPos())) {
+						waypoint = world.worldMap.get(waypoint.explorerPos);
+						wayToPoint.add(waypoint);
+					}
+					Direction moveDir = wayToPoint.get(wayToPoint.size() - 1).exploredByLooking;
+					wayToPoint.remove(wayToPoint.size() - 1);
+					player.move(moveDir);
+				}
+			} else {
+				Direction moveDir = wayToPoint.get(wayToPoint.size() - 1).exploredByLooking;
+				wayToPoint.remove(wayToPoint.size() - 1);
+				player.move(moveDir);
 			}
 		}
 	}
