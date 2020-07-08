@@ -11,8 +11,9 @@ public class InputHandler {
 	private World world;
 	private Player player;
 	private Scanner input;
-	private Map<InputType, WaypointType> inputMap;
 	private String lastActionResult;
+	private Map<InputType, WaypointType> inputMap;
+	private List<String> rawInput = new ArrayList<>();
 
 	enum InputType {
 		currentCellStatus, northCellStatus, eastCellStatus, southCellStatus, westCellStatus;
@@ -45,26 +46,33 @@ public class InputHandler {
 		this.player.setStartPos(new Vector2(startX, startY));
 		this.player.setPosition(player.getStartPos());
 	}
-
+	
 	public boolean update() {
+		// Listeneintrag für jeden InputType 
 		if (input.hasNext()) {
-			inputMap = new HashMap<>();
 			lastActionResult = input.nextLine();
-			inputMap.put(InputType.currentCellStatus, Waypoint.GetType(input.nextLine()));
-			inputMap.put(InputType.northCellStatus, Waypoint.GetType(input.nextLine()));
-			inputMap.put(InputType.eastCellStatus, Waypoint.GetType(input.nextLine()));
-			inputMap.put(InputType.southCellStatus, Waypoint.GetType(input.nextLine()));
-			inputMap.put(InputType.westCellStatus, Waypoint.GetType(input.nextLine()));
+			// Map für ENUMS
+			inputMap = new HashMap<>();
+			// Liste für unbearbeitete Strings
+			rawInput = new ArrayList<>();
+			
+			
+			for (InputType inputType : InputType.values()) {
+				String inputString = input.nextLine();
+				inputMap.put(inputType, Waypoint.GetType(inputString));
+				rawInput.add(inputString);
+			}
 			return true;
 		} else {
 			return false;
 		}
+
 	}
 
 	public WaypointType getInputOf(InputType inputType) {
 		return inputMap.get(inputType);
 	}
-	
+
 	public String getLastActionResult() {
 		return this.lastActionResult;
 	}
@@ -76,11 +84,9 @@ public class InputHandler {
 	public void printDebugInfo() {
 		// Print Debug Information
 		System.err.println("lastActionResult: " + this.lastActionResult);
-		System.err.println("currentCellStatus: " + this.getInputOf(InputType.currentCellStatus));
-		System.err.println("northCellStatus: " + this.getInputOf(InputType.northCellStatus));
-		System.err.println("eastCellStatus: " + this.getInputOf(InputType.eastCellStatus));
-		System.err.println("southCellStatus: " + this.getInputOf(InputType.southCellStatus));
-		System.err.println("westCellStatus: " + this.getInputOf(InputType.westCellStatus));
+		for(InputType inputType : InputType.values()) {
+			System.err.println(inputType.toString() + ": " + this.getInputOf(inputType));
+		}
 	}
 
 	public static InputType directionToInput(Direction direction) {
@@ -97,5 +103,7 @@ public class InputHandler {
 			return null;
 		}
 	}
-
+	/*
+	 * public boolean isPlayerFinish() { if() return true; }
+	 */
 }

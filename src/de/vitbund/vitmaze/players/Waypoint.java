@@ -3,32 +3,50 @@ package de.vitbund.vitmaze.players;
 import de.vitbund.vitmaze.players.Vector2.Direction;
 
 public class Waypoint {
-	
-	
-	enum WaypointType
-	{
-	   FLOOR, WALL, FINISH, FORM;
+
+	enum WaypointType {
+		FLOOR, WALL, FINISH, FINISHENEMY, FORM, FORMENEMY;
 	}
-	
+
 	public WaypointType waypointType;
 	public Vector2 position;
 	public Vector2 explorerPos;
 	public Direction exploredByLooking;
 	public boolean isExplored = false;
-	
+
 	public Waypoint(WaypointType waypointType, Vector2 pos) {
 		this.waypointType = waypointType;
 		this.position = pos;
 	}
-	
+
 	public static WaypointType GetType(String type) {
-		type = type.split(" ")[0];
-		switch(type) {
-		case "FLOOR": return WaypointType.FLOOR;
-		case "WALL": return WaypointType.WALL;
-		case "FINISH": return WaypointType.FINISH;
-		case "FORM": return WaypointType.FORM;
-		default: return null;
+		String[] typeArray = type.split(" ");
+		type = typeArray[0];
+
+		switch (type) {
+
+		case "FLOOR":
+			return WaypointType.FLOOR;
+
+		case "WALL":
+			return WaypointType.WALL;
+
+		case "FINISH":
+			if (Integer.parseInt(typeArray[1]) == PathfinderBot.player.getId()) {
+				return WaypointType.FINISH;
+			} else {
+				return WaypointType.FINISHENEMY;
+			}
+
+		case "FORM":
+			if (Integer.parseInt(typeArray[1]) == PathfinderBot.player.getId()) {
+				return WaypointType.FORM;
+			} else {
+				return WaypointType.FORMENEMY;
+			}
+
+		default:
+			return null;
 		}
 	}
 

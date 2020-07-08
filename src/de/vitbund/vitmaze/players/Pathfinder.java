@@ -9,49 +9,15 @@ import de.vitbund.vitmaze.players.Waypoint.WaypointType;
 
 public class Pathfinder {
 
-	private InputHandler inputHandler;
 	private World world;
-	private Player player;
-	private Queue<Waypoint> waypointQ = new LinkedList<Waypoint>();
 	private List<Waypoint> wayToPoint = new ArrayList<Waypoint>();
 
+
 	public Pathfinder() {
-		this.inputHandler = PathfinderBot.inputHandler;
 		this.world = PathfinderBot.world;
-		this.player = PathfinderBot.player;
 	}
 
-	public void exploreNeighbours() {
-		for (Direction direction : Direction.values()) {
-			// Store cell, is FLOOR WALL etc..
-			Vector2 pos = Vector2.AddUp(player.getPosition(), Vector2.directionToVector(direction));
-			Waypoint cell = new Waypoint(inputHandler.getInputOf(InputHandler.directionToInput(direction)), pos);
-			cell.explorerPos = player.getPosition();
-			cell.exploredByLooking = direction;
-
-			if (!world.containsKey(pos)) {
-				world.addWaypoint(pos, cell);
-
-				if (!cell.waypointType.equals(WaypointType.WALL)) {
-					waypointQ.add(cell);
-				}
-			}
-		}
-	}
-
-	public void move() {
-		if(wayToPoint.isEmpty()) {
-			findPath(player.getPosition(), waypointQ.poll().position);
-		}
-		for (Waypoint waypoint : wayToPoint) {
-			System.err.println(waypoint.exploredByLooking);
-		}
-		Direction moveDirection = wayToPoint.get(0).exploredByLooking;
-		wayToPoint.remove(0);
-		player.move(moveDirection);
-	}
-
-	public void findPath(Vector2 startPos, Vector2 targetPos) {
+	public List<Waypoint> findPath(Vector2 startPos, Vector2 targetPos) {
 		//Erstelle exakte Kopie der World Map
 		Map<Vector2, Waypoint> map = new HashMap<Vector2, Waypoint>();
 		map.putAll(world.worldMap);
@@ -118,9 +84,14 @@ public class Pathfinder {
             wayToPoint.add(previous);
             previous = map.get(previous.explorerPos);
         }
-        //wayToPoint.add(start);
         
         //Reverse List
         Collections.reverse(wayToPoint);
+        
+        return wayToPoint;
+	}
+	
+	public List<Waypoint> getPath() {
+		return this.wayToPoint;
 	}
 }

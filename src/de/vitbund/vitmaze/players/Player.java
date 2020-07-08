@@ -34,7 +34,7 @@ public class Player {
 
 	public void updatePosition() {
 		if (lastMove != null) {
-			boolean moved = ActionHandler.moveSuccess(lastMove);
+			boolean moved = PathfinderBot.actionHandler.moveSuccess(lastMove);
 			System.err.println(moved);
 			if (moved) {
 				position = position.AddUp(position, Vector2.directionToVector(lastMove));

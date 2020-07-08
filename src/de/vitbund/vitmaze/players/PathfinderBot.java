@@ -15,15 +15,19 @@ public class PathfinderBot {
 	 */
 	
 	public static InputHandler inputHandler;
+	public static ActionHandler actionHandler;
 	public static Pathfinder pathfinder;
 	public static Player player;
 	public static World world;
+	public static Explorer explorer;
 	
 	public static void main(String[] args) {
 		world = new World();
 		player = new Player();
 		inputHandler = new InputHandler(world, player);
+		actionHandler = new ActionHandler(inputHandler);
 		pathfinder = new Pathfinder();
+		explorer = new Explorer();
 		
 		// TURN (Wiederholung je Runde notwendig)
 		while(inputHandler.update()) {
@@ -37,8 +41,11 @@ public class PathfinderBot {
 			}
 			player.updatePosition();
 			
-			pathfinder.exploreNeighbours();
-			pathfinder.move();
+			explorer.explore();
+			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH)
+				System.out.println("finish");
+			explorer.move();
+			
 			
 			System.err.println(world.worldMap.size());
 			

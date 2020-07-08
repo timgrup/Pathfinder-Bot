@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class World {
 	
-	int sizeX, sizeY, level;
+	int sizeX, sizeY, level, formCount;
 	public Map<Vector2, Waypoint> worldMap;
 	
 	public World() {
