@@ -56,13 +56,18 @@ public class InputHandler {
 			// Liste für unbearbeitete Strings
 			rawInput = new ArrayList<>();
 			
-			
+			// Zeile einlesen für jeden inputType/ENUM
 			for (InputType inputType : InputType.values()) {
 				String inputString = input.nextLine();
 				inputMap.put(inputType, Waypoint.GetType(inputString));
 				rawInput.add(inputString);
 			}
-			return true;
+			
+			for(String s : rawInput) {
+				System.err.println(s);
+			}
+			
+			return true; 	// Update erfolgreich
 		} else {
 			return false;
 		}
@@ -103,7 +108,9 @@ public class InputHandler {
 			return null;
 		}
 	}
-	/*
-	 * public boolean isPlayerFinish() { if() return true; }
-	 */
+	
+	public int getForm(Direction d) {
+		String playerID = rawInput[InputHandler.directionToInput(d).ordinal()];
+		return 1;
+	}
 }

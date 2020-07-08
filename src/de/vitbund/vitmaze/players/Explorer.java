@@ -36,6 +36,10 @@ public class Explorer {
 			
 			if (!world.containsKey(pos)) {
 				world.addWaypoint(pos, cell);
+				
+				if(cell.waypointType.equals(WaypointType.FORM)) {
+					// TODO:world.addForm(inputHandler., w);
+				}
 				if (!cell.waypointType.equals(WaypointType.WALL)) {
 					waypointQ.add(cell);
 				}
