@@ -42,8 +42,15 @@ public class PathfinderBot {
 			player.updatePosition();
 			
 			explorer.explore();
-			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH)
+			
+			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH) {
 				System.out.println("finish");
+			}
+			
+			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && ) {
+				System.out.println("take");
+			}
+				
 			explorer.move();
 			
 			

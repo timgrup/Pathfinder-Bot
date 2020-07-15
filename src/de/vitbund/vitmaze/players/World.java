@@ -5,13 +5,15 @@ import java.util.Map;
 
 public class World {
 	
-	int sizeX, sizeY, level, formCount;
+	// Attribute
+	int sizeX, sizeY, level, formCountMin;
 	public Map<Vector2, Waypoint> worldMap;
-	public Waypoint[] forms;
+	public Map<Integer, Waypoint> forms;
 	
+	// Konstruktor
 	public World() {
-		worldMap = new HashMap<Vector2, Waypoint>();
-		forms = null;
+		worldMap = new HashMap<>();
+		forms = new HashMap<>();;
 	}
 	
 	public void addWaypoint(Vector2 pos, Waypoint waypoint) {
@@ -22,12 +24,8 @@ public class World {
 		return worldMap.containsKey(pos);
 	}
 	
-	public void formsDiscovered(int amount) {
-		this.formCount = amount;
-		forms = new Waypoint[this.formCount];
-	}
-	
+	// Füge ein Formular zu Map hinzu
 	public void addForm(int i, Waypoint w) {
-		forms[i] = w;
+		forms.put(i, w);
 	}
 }
