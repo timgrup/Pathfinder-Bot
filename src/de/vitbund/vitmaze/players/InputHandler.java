@@ -64,7 +64,7 @@ public class InputHandler {
 			}
 			
 			for(String s : rawInput) {
-				System.err.println(s);
+				System.err.println("rawInput: "+s);
 			}
 			
 			return true; 	// Update erfolgreich
@@ -110,7 +110,8 @@ public class InputHandler {
 	}
 	
 	public int getForm(Direction d) {
-		String playerID = rawInput[InputHandler.directionToInput(d).ordinal()];
+		String playerID = rawInput.get(InputHandler.directionToInput(d).ordinal());
+		System.err.println("playerID: "+playerID);
 		return 1;
 	}
 }

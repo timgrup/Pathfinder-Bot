@@ -47,7 +47,7 @@ public class PathfinderBot {
 				System.out.println("finish");
 			}
 			
-			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && ) {
+			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM) {
 				System.out.println("take");
 			}
 				
@@ -55,6 +55,8 @@ public class PathfinderBot {
 			
 			
 			System.err.println(world.worldMap.size());
+			
+			
 			
 			/*
 			for (HashMap.Entry<Vector2, Waypoint> entry : world.worldMap.entrySet()) {

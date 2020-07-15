@@ -33,6 +33,7 @@ public class Explorer {
 			Waypoint cell = new Waypoint(inputHandler.getInputOf(InputHandler.directionToInput(direction)), pos);
 			cell.explorerPos = player.getPosition();
 			cell.exploredByLooking = direction;
+			inputHandler.getForm(direction);
 			
 			if (!world.containsKey(pos)) {
 				world.addWaypoint(pos, cell);
