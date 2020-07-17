@@ -6,7 +6,8 @@ import java.util.Map;
 public class World {
 	
 	// Attribute
-	int sizeX, sizeY, level, formCountMin;
+	int formCountMin = 0;
+	int sizeX, sizeY, level;
 	public Map<Vector2, Waypoint> worldMap;
 	public Map<Integer, Waypoint> forms;
 	

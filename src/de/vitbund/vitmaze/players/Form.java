@@ -4,8 +4,9 @@ public class Form {
 	
 	public int formID;
 	public int playerID;
+	public Waypoint waypoint; //null wenn später nicht gesetzt wird
 	
-	public Form(int formID, int playerID) {
+	public Form(int playerID, int formID) {
 		this.formID = formID;
 		this.playerID = playerID;
 	}

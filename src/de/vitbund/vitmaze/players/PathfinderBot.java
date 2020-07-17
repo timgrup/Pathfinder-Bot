@@ -41,20 +41,10 @@ public class PathfinderBot {
 			}
 			player.updatePosition();
 			
-			explorer.explore();
-			
-			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH) {
-				System.out.println("finish");
-			}
-			
-			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM) {
-				System.out.println("take");
-			}
-				
-			explorer.move();
+			explorer.update();
 			
 			
-			System.err.println(world.worldMap.size());
+			System.err.println("Min Form Count: " + world.formCountMin);
 			
 			/*
 			for (HashMap.Entry<Vector2, Waypoint> entry : world.worldMap.entrySet()) {

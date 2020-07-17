@@ -54,7 +54,7 @@ public class Pathfinder {
             if (!isRunning) break;
             for (Direction direction : Direction.values())
             {
-                Vector2 neighbourPos = Vector2.AddUp(searchingFrom.position, Vector2.directionToVector(direction));
+                Vector2 neighbourPos = Vector2.addUp(searchingFrom.position, Vector2.directionToVector(direction));
 
                 if(map.containsKey(neighbourPos) && map.get(neighbourPos).waypointType != WaypointType.WALL)
                 {

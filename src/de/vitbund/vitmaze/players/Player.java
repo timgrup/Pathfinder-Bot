@@ -9,6 +9,8 @@ public class Player {
 	private Vector2 startPos;
 	private Vector2 position;
 	private Direction lastMove;
+	private int formsPickedUp;
+	public boolean finishVisited = false;
 
 	public void move(Direction moveDirection) {
 		switch (moveDirection) {
@@ -37,7 +39,7 @@ public class Player {
 			boolean moved = PathfinderBot.actionHandler.moveSuccess(lastMove);
 			System.err.println(moved);
 			if (moved) {
-				position = position.AddUp(position, Vector2.directionToVector(lastMove));
+				position = position.addUp(position, Vector2.directionToVector(lastMove));
 			}
 		}
 	}
@@ -85,6 +87,15 @@ public class Player {
 
 	public void setPosition(Vector2 position) {
 		this.position = position;
+	}
+	
+	public int getFormsPickedUp() {
+		return this.formsPickedUp;
+	}
+	
+	public void pickUpForm() {
+		System.out.println("take");
+		formsPickedUp++;
 	}
 
 	public static Direction revertDirection(Direction direction) {

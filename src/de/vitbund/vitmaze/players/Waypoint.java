@@ -33,6 +33,7 @@ public class Waypoint {
 
 		case "FINISH":
 			if (Integer.parseInt(typeArray[1]) == PathfinderBot.player.getId()) {
+				PathfinderBot.world.formCountMin = Integer.parseInt(typeArray[2]);
 				return WaypointType.FINISH;
 			} else {
 				return WaypointType.FINISHENEMY;
@@ -40,6 +41,10 @@ public class Waypoint {
 
 		case "FORM":
 			if (Integer.parseInt(typeArray[1]) == PathfinderBot.player.getId()) {
+				int formID = Integer.parseInt(typeArray[2]);
+				if(PathfinderBot.world.formCountMin < formID) {
+					PathfinderBot.world.formCountMin = formID; //FormID entspricht der min Menge an Formularen
+				}
 				return WaypointType.FORM;
 			} else {
 				return WaypointType.FORMENEMY;

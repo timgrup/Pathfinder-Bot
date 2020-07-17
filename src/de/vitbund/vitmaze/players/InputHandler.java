@@ -109,8 +109,14 @@ public class InputHandler {
 		}
 	}
 	
-	public int getForm(Direction d) {
-		String playerID = rawInput[InputHandler.directionToInput(d).ordinal()];
-		return 1;
+	public Form getForm(Direction d) {
+		WaypointType waypoint = getInputOf(directionToInput(d));
+		if(waypoint == WaypointType.FORM || waypoint == WaypointType.FORMENEMY) {
+			String rawString = rawInput.get(InputHandler.directionToInput(d).ordinal());
+			String[] rawStringArray = rawString.split(" ");
+			Form form = new Form(Integer.parseInt(rawStringArray[1]), Integer.parseInt(rawStringArray[2]));
+			return form;
+		}
+		return null;
 	}
 }
