@@ -119,4 +119,15 @@ public class InputHandler {
 		}
 		return null;
 	}
+	
+	public Form getFormHere() {
+		WaypointType waypoint = getInputOf(InputType.currentCellStatus);
+		if(waypoint == WaypointType.FORM || waypoint == WaypointType.FORMENEMY) {
+			String rawString = rawInput.get(InputType.currentCellStatus.ordinal());
+			String[] rawStringArray = rawString.split(" ");
+			Form form = new Form(Integer.parseInt(rawStringArray[1]), Integer.parseInt(rawStringArray[2]));
+			return form;
+		}
+		return null;
+	}
 }

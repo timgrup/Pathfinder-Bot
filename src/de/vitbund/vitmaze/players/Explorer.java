@@ -44,10 +44,9 @@ public class Explorer {
 		if(finishDirection != null && !player.finishVisited) {
 			player.move(finishDirection);
 			player.finishVisited = true;
-		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH) {
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH && player.getFormsPickedUp() == world.formCountMin) {
 			System.out.println("finish");
-		} else if(false) {
-			//inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && inputHandler.getFormHere().formID == player.getFormsPickedUp()+1) {
 			player.pickUpForm();
 		} else {
 			move();			
