@@ -47,7 +47,7 @@ public class PathfinderBot {
 				System.out.println("finish");
 			}
 			
-			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && ) {
+			if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM) {
 				System.out.println("take");
 			}
 				
