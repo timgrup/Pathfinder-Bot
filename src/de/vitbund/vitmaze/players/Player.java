@@ -11,6 +11,7 @@ public class Player {
 	private Direction lastMove;
 	private int formsPickedUp;
 	public boolean finishVisited = false;
+	public boolean conditionsFinish = false;
 
 	public void move(Direction moveDirection) {
 		switch (moveDirection) {
