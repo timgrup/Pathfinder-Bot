@@ -10,6 +10,7 @@ public class Player {
 	private Vector2 position;
 	private Direction lastMove;
 	private int formsPickedUp;
+	public boolean lastActionWasKick = false;
 	public boolean finishVisited = false;
 	public boolean conditionsFinish = false;
 
@@ -40,12 +41,13 @@ public class Player {
 			boolean moved = PathfinderBot.actionHandler.moveSuccess(lastMove);
 			System.err.println(moved);
 			if (moved) {
-				position = position.addUp(position, Vector2.directionToVector(lastMove));
+				position = Vector2.addUp(position, Vector2.directionToVector(lastMove));
 				if(!PathfinderBot.explorer.pathIsEmpty()) {
 					PathfinderBot.explorer.removeFirstWaypointFromPath();					
 				}
 			}
 		}
+		lastActionWasKick = false;
 	}
 
 	private void goNorth() {
@@ -102,10 +104,19 @@ public class Player {
 		formsPickedUp++;
 	}
 	
+	public void undoPickUp() {
+		formsPickedUp--;
+	}
+	
 	public void finishGame() {
 		System.out.println("finish");
 	}
 
+	public void kick(Direction direction) {
+		System.out.println("kick " + direction.toString().toLowerCase());
+		lastActionWasKick = true;
+	}
+	
 	public static Direction revertDirection(Direction direction) {
 		switch (direction) {
 		case NORTH:
@@ -120,5 +131,4 @@ public class Player {
 			return null;
 		}
 	}
-
 }

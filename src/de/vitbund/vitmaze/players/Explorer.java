@@ -20,6 +20,7 @@ public class Explorer {
 	private List<Waypoint> path; 
 	private boolean pathLeadsToFinish = false;
 	private boolean pathLeadsToForm = false;
+	private boolean lostForm = false;
 	private Queue<Waypoint> waypointQ = Collections.asLifoQueue(new ArrayDeque<Waypoint>());
 	
 	public Explorer() {
@@ -31,7 +32,18 @@ public class Explorer {
 	}
 	
 	public void update() {
-		explore();
+		/*
+		if(!PathfinderBot.actionHandler.isTakeable()) {
+			world.worldMap.get(player.getPosition()).waypointType = inputHandler.getInputOf(InputType.currentCellStatus);
+			world.forms.remove(player.getFormsPickedUp());
+			player.undoPickUp();
+			lostForm = true;
+		}
+		*/
+		
+		updateSurroundingWayPointTypes();
+		
+		explore();			
 		
 		Direction finishDirection = null;
 		for(Direction direction: Direction.values()) {
@@ -59,8 +71,22 @@ public class Explorer {
 				pathLeadsToFinish = true;
 			}
 			move();
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORMENEMY) {
+			Direction directionFloor = null;
+			for(Direction direction : Direction.values()) {
+				if(world.worldMap.get(Vector2.addUp(player.getPosition(), Vector2.directionToVector(direction))).waypointType == WaypointType.FLOOR) {
+					directionFloor = direction;
+					break;
+				}
+			}
+			if(directionFloor != null) {
+				player.kick(directionFloor);				
+			} else {
+				move();
+			}
 		} else if(finishDirection != null && !player.finishVisited) { //Spieler versucht, wenn in Sichtweite und Finish noch unbekannt, dieses zu entdecken
 			player.move(finishDirection);
+			waypointQ.remove(world.worldMap.get(Vector2.addUp(player.getPosition(), Vector2.directionToVector(finishDirection))));
 			player.finishVisited = true;
 		} else if(player.getFormsPickedUp() < world.formCountMin && player.finishVisited && !pathLeadsToForm && world.forms.size() == world.formCountMin) { //Spieler erzeugt weg zum nächsten Formular
 			Waypoint nextForm = world.forms.get(player.getFormsPickedUp()+1); 
@@ -75,10 +101,45 @@ public class Explorer {
 			if(pathLeadsToForm) {
 				pathLeadsToForm = false;
 			}
-		} else { //Spieler bewegt sich, falls er keine bessere Alternative hat
+		}
+		else { //Spieler bewegt sich, falls er keine bessere Alternative hat
 			move();
 		}
 			
+	}
+
+	private void updateSurroundingWayPointTypes() {
+		Waypoint savedWaypoint = world.worldMap.get(player.getPosition());
+		WaypointType currentType = inputHandler.getInputOf(InputType.currentCellStatus);
+		
+		if(savedWaypoint.waypointType != currentType && savedWaypoint.waypointType != WaypointType.WALL) {
+			savedWaypoint.waypointType = currentType;
+			
+			if(savedWaypoint.waypointType == WaypointType.FORM) {
+				Form form = inputHandler.getFormHere();
+				world.forms.remove(form.formID);
+				world.addForm(form.formID, savedWaypoint);
+			}
+		}
+		
+		
+		for(Direction direction: Direction.values()) {
+			savedWaypoint = world.worldMap.get(Vector2.addUp(player.getPosition(), Vector2.directionToVector(direction)));
+			currentType = inputHandler.getInputOf(InputHandler.directionToInput(direction));
+			
+			if(world.worldMap.containsKey(Vector2.addUp(player.getPosition(), Vector2.directionToVector(direction))) && savedWaypoint.waypointType != WaypointType.WALL) {
+				if(savedWaypoint.waypointType != currentType) {
+					savedWaypoint.waypointType = currentType;
+				}
+				
+				if(savedWaypoint.waypointType == WaypointType.FORM) {
+					Form form = inputHandler.getForm(direction);
+					world.forms.remove(form.formID);
+					world.addForm(form.formID, savedWaypoint);
+				}
+			}
+		}
+		//&& (savedWaypoint.waypointType == WaypointType.FORM || savedWaypoint.waypointType == WaypointType.FORMENEMY)
 	}
 
 	public void explore() {
@@ -96,30 +157,28 @@ public class Explorer {
 						Form form = inputHandler.getForm(direction);
 						world.addForm(form.formID, cell);
 					}
-					if(!waypointQ.contains(cell)) {
-						waypointQ.add(cell);						
-					}
+					waypointQ.add(cell);
 				}
 			}
 		}
 	}
 	
 	public void move() {
-		
 		if(path.isEmpty()) {
 			System.err.println("WaypointQ Size: " + waypointQ.size());
-			path = pathfinder.findPath(player.getPosition(), waypointQ.poll().position);
+			Waypoint nextWaypoint = waypointQ.poll();
+			System.err.println("Next Waypoint!: " + nextWaypoint.position.toString());
+			path = pathfinder.findPath(player.getPosition(), nextWaypoint.position);
 		}
 		
 		for (Waypoint w : path) {
 			System.err.println(w.exploredByLooking);
 		}
 
-		if(!path.isEmpty()) {
-			Direction moveDirection = path.get(0).exploredByLooking;
-			player.move(moveDirection);
-		}
-		
+		Waypoint moveWaypoint = path.get(0);
+		Direction moveDirection = moveWaypoint.exploredByLooking;
+		player.move(moveDirection);
+		System.err.println("My next Target is: " + moveWaypoint.waypointType);
 	}
 	
 	public void removeFirstWaypointFromPath() {

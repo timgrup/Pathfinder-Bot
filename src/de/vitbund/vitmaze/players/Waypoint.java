@@ -60,7 +60,6 @@ public class Waypoint {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((position == null) ? 0 : position.hashCode());
-		result = prime * result + ((waypointType == null) ? 0 : waypointType.hashCode());
 		return result;
 	}
 
@@ -78,9 +77,6 @@ public class Waypoint {
 				return false;
 		} else if (!position.equals(other.position))
 			return false;
-		if (waypointType != other.waypointType)
-			return false;
 		return true;
 	}
-
 }
