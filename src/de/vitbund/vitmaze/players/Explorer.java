@@ -32,14 +32,9 @@ public class Explorer {
 	}
 	
 	public void update() {
-		/*
-		if(!PathfinderBot.actionHandler.isTakeable()) {
-			world.worldMap.get(player.getPosition()).waypointType = inputHandler.getInputOf(InputType.currentCellStatus);
-			world.forms.remove(player.getFormsPickedUp());
-			player.undoPickUp();
-			lostForm = true;
-		}
-		*/
+
+		
+
 		
 		updateSurroundingWayPointTypes();
 		
@@ -59,7 +54,6 @@ public class Explorer {
 		}
 		
 		if(player.conditionsFinish && inputHandler.getInputOf(InputType.currentCellStatus) != WaypointType.FINISH) { //Erstellt und läuft zum Finish, wenn alle Siegeskonditionen erfüllt werden
-			System.err.println("Conditions Finished");
 			if(!pathLeadsToFinish) {
 				Waypoint finishWaypoint = null;
 				for(Waypoint waypoint : world.worldMap.values()) {
@@ -70,8 +64,12 @@ public class Explorer {
 				path = pathfinder.findPath(player.getPosition(), finishWaypoint.position);
 				pathLeadsToFinish = true;
 			}
-			move();
-		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORMENEMY) {
+		move();
+		/*}else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORMENEMY && world.level == 5) {
+			player.putSheet(); */
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.SHEET) {
+			player.pickUp();
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORMENEMY && world.level >= 4) {
 			Direction directionFloor = null;
 			for(Direction direction : Direction.values()) {
 				if(world.worldMap.get(Vector2.addUp(player.getPosition(), Vector2.directionToVector(direction))).waypointType == WaypointType.FLOOR) {
@@ -93,7 +91,7 @@ public class Explorer {
 			path = pathfinder.findPath(player.getPosition(), nextForm.position);
 			pathLeadsToForm = true;
 			move();
-		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH && player.getFormsPickedUp() == world.formCountMin) { //Spieler versucht, Spiel zu beenden, wenn alle Forms eingesammelt wurden und dieser sich auf Finish befindet
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH && player.getFormsPickedUp() >= world.formCountMin) { //Spieler versucht, Spiel zu beenden, wenn alle Forms eingesammelt wurden und dieser sich auf Finish befindet
 			player.finishGame();
 		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && inputHandler.getFormHere().formID == player.getFormsPickedUp()+1) { //Spieler versucht, wenn er auf dem nächsten einsammelbaren Formular steht, dieses einzusammeln
 			player.pickUpForm();
@@ -139,7 +137,6 @@ public class Explorer {
 				}
 			}
 		}
-		//&& (savedWaypoint.waypointType == WaypointType.FORM || savedWaypoint.waypointType == WaypointType.FORMENEMY)
 	}
 
 	public void explore() {
@@ -165,20 +162,13 @@ public class Explorer {
 	
 	public void move() {
 		if(path.isEmpty()) {
-			System.err.println("WaypointQ Size: " + waypointQ.size());
 			Waypoint nextWaypoint = waypointQ.poll();
-			System.err.println("Next Waypoint!: " + nextWaypoint.position.toString());
 			path = pathfinder.findPath(player.getPosition(), nextWaypoint.position);
-		}
-		
-		for (Waypoint w : path) {
-			System.err.println(w.exploredByLooking);
 		}
 
 		Waypoint moveWaypoint = path.get(0);
 		Direction moveDirection = moveWaypoint.exploredByLooking;
 		player.move(moveDirection);
-		System.err.println("My next Target is: " + moveWaypoint.waypointType);
 	}
 	
 	public void removeFirstWaypointFromPath() {

@@ -40,7 +40,6 @@ public class Pathfinder {
 		boolean isRunning = true;
 		
 		//Füge Start hinzu
-		System.err.println(start);
 		queue.add(start);
 
         while (queue.size() > 0 && isRunning)

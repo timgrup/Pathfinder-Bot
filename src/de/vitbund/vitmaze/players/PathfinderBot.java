@@ -47,14 +47,6 @@ public class PathfinderBot {
 			System.err.println("Min Form Count: " + world.formCountMin);
 			System.err.println("Form Count: " + world.forms.size());
 			System.err.println("Player Picked Up: " + player.getFormsPickedUp());
-			
-			System.err.println(world.forms.toString());
-			
-			/*
-			for (HashMap.Entry<Vector2, Waypoint> entry : world.worldMap.entrySet()) {
-			    System.err.println(entry.getKey().toString() + "/" + entry.getValue().waypointType.toString());
-			}
-			*/
 		}
 		
 		// Eingabe schliessen (letzte Aktion)

@@ -8,6 +8,7 @@ public class Player {
 	private int id;
 	private Vector2 startPos;
 	private Vector2 position;
+	private int sheetCount;
 	private Direction lastMove;
 	private int formsPickedUp;
 	public boolean lastActionWasKick = false;
@@ -31,15 +32,11 @@ public class Player {
 		default:
 			break;
 		}
-
-		System.err.println("!! " + PathfinderBot.inputHandler.getLastActionResult());
-		System.err.println("Player Position: " + position.toString());
 	}
 
 	public void updatePosition() {
 		if (lastMove != null) {
 			boolean moved = PathfinderBot.actionHandler.moveSuccess(lastMove);
-			System.err.println(moved);
 			if (moved) {
 				position = Vector2.addUp(position, Vector2.directionToVector(lastMove));
 				if(!PathfinderBot.explorer.pathIsEmpty()) {
@@ -99,6 +96,15 @@ public class Player {
 		return this.formsPickedUp;
 	}
 	
+	public int getSheetCount() {
+		return sheetCount;
+	}
+
+	public void setSheetCount(int sheetCount) {
+		this.sheetCount = sheetCount;
+	}
+
+	
 	public void pickUpForm() {
 		System.out.println("take");
 		formsPickedUp++;
@@ -115,6 +121,14 @@ public class Player {
 	public void kick(Direction direction) {
 		System.out.println("kick " + direction.toString().toLowerCase());
 		lastActionWasKick = true;
+	}
+	
+	public void putSheet() {
+		System.out.println("put");
+	}
+	
+	public void pickUp() {
+		System.out.println("take");
 	}
 	
 	public static Direction revertDirection(Direction direction) {

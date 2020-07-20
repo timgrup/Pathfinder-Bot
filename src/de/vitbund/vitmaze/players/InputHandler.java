@@ -37,14 +37,18 @@ public class InputHandler {
 		int playerId = input.nextInt(); // id dieses Players / Bots
 		int startX = input.nextInt(); // X-Koordinate der Startposition dieses Player
 		int startY = input.nextInt(); // Y-Koordinate der Startposition dieses Players
+		int sheetCount = input.nextInt();
 		input.nextLine(); // Beenden der zweiten Zeile
 
 		this.world.sizeX = sizeX;
 		this.world.sizeY = sizeY;
+		this.world.level = level;
 
 		this.player.setId(playerId);
 		this.player.setStartPos(new Vector2(startX, startY));
 		this.player.setPosition(player.getStartPos());
+		this.player.setSheetCount(sheetCount);
+		
 	}
 	
 	public boolean update() {
@@ -62,11 +66,6 @@ public class InputHandler {
 				inputMap.put(inputType, Waypoint.GetType(inputString));
 				rawInput.add(inputString);
 			}
-			
-			for(String s : rawInput) {
-				System.err.println(s);
-			}
-			
 			return true; 	// Update erfolgreich
 		} else {
 			return false;

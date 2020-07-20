@@ -5,7 +5,7 @@ import de.vitbund.vitmaze.players.Vector2.Direction;
 public class Waypoint {
 
 	enum WaypointType {
-		FLOOR, WALL, FINISH, FINISHENEMY, FORM, FORMENEMY;
+		FLOOR, WALL, FINISH, FINISHENEMY, FORM, FORMENEMY, SHEET, UNKNOWN;
 	}
 
 	public WaypointType waypointType;
@@ -49,9 +49,11 @@ public class Waypoint {
 			} else {
 				return WaypointType.FORMENEMY;
 			}
+		case "SHEET":
+			return WaypointType.SHEET;
 
 		default:
-			return null;
+			return WaypointType.UNKNOWN;
 		}
 	}
 
