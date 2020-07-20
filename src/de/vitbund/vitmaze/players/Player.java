@@ -41,6 +41,9 @@ public class Player {
 			System.err.println(moved);
 			if (moved) {
 				position = position.addUp(position, Vector2.directionToVector(lastMove));
+				if(!PathfinderBot.explorer.pathIsEmpty()) {
+					PathfinderBot.explorer.removeFirstWaypointFromPath();					
+				}
 			}
 		}
 	}
@@ -97,6 +100,10 @@ public class Player {
 	public void pickUpForm() {
 		System.out.println("take");
 		formsPickedUp++;
+	}
+	
+	public void finishGame() {
+		System.out.println("finish");
 	}
 
 	public static Direction revertDirection(Direction direction) {

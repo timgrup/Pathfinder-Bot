@@ -19,6 +19,7 @@ public class Explorer {
 	private Pathfinder pathfinder;
 	private List<Waypoint> path; 
 	private boolean pathLeadsToFinish = false;
+	private boolean pathLeadsToForm = false;
 	private Queue<Waypoint> waypointQ = Collections.asLifoQueue(new ArrayDeque<Waypoint>());
 	
 	public Explorer() {
@@ -45,15 +46,29 @@ public class Explorer {
 			player.conditionsFinish = true;
 		}
 		
-		if(player.conditionsFinish) {
+		if(player.conditionsFinish && inputHandler.getInputOf(InputType.currentCellStatus) != WaypointType.FINISH) {
 			System.err.println("Conditions Finished");
+			if(!pathLeadsToFinish) {
+				Waypoint finishWaypoint = null;
+				for(Waypoint waypoint : world.worldMap.values()) {
+					if(waypoint.waypointType == WaypointType.FINISH) {
+						finishWaypoint = waypoint;
+					}
+				}
+				path = pathfinder.findPath(player.getPosition(), finishWaypoint.position);
+				pathLeadsToFinish = true;
+			}
+			move();
 		} else if(finishDirection != null && !player.finishVisited) {
 			player.move(finishDirection);
 			player.finishVisited = true;
 		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH && player.getFormsPickedUp() == world.formCountMin) {
-			System.out.println("finish");
+			player.finishGame();
 		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && inputHandler.getFormHere().formID == player.getFormsPickedUp()+1) {
 			player.pickUpForm();
+			if(pathLeadsToForm) {
+				pathLeadsToForm = false;
+			}
 		} else {
 			move();
 		}
@@ -70,11 +85,11 @@ public class Explorer {
 			if (!world.containsKey(pos)) {
 				world.addWaypoint(pos, cell);
 				
-				if(cell.waypointType.equals(WaypointType.FORM)) {
-					Form form = inputHandler.getForm(direction);
-					world.addForm(form.formID, cell);
-				}
 				if (!cell.waypointType.equals(WaypointType.WALL)) {
+					if(cell.waypointType.equals(WaypointType.FORM)) {
+						Form form = inputHandler.getForm(direction);
+						world.addForm(form.formID, cell);
+					}
 					waypointQ.add(cell);
 				}
 			}
@@ -84,6 +99,7 @@ public class Explorer {
 	public void move() {
 		
 		if(path.isEmpty()) {
+			System.err.println("WaypointQ Size: " + waypointQ.size());
 			path = pathfinder.findPath(player.getPosition(), waypointQ.poll().position);
 		}
 		
@@ -92,7 +108,15 @@ public class Explorer {
 		}
 		
 		Direction moveDirection = path.get(0).exploredByLooking;
-		path.remove(0);
+		//path.remove(0);
 		player.move(moveDirection);
+	}
+	
+	public void removeFirstWaypointFromPath() {
+		path.remove(0);
+	}
+	
+	public boolean pathIsEmpty() {
+		return path.isEmpty();
 	}
 }
