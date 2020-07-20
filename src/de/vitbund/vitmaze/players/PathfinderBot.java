@@ -43,8 +43,12 @@ public class PathfinderBot {
 			
 			explorer.update();
 			
-			
+			System.err.println("Player Pos: " + player.getPosition());
 			System.err.println("Min Form Count: " + world.formCountMin);
+			System.err.println("Form Count: " + world.forms.size());
+			System.err.println("Player Picked Up: " + player.getFormsPickedUp());
+			
+			System.err.println(world.forms.toString());
 			
 			/*
 			for (HashMap.Entry<Vector2, Waypoint> entry : world.worldMap.entrySet()) {

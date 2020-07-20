@@ -46,7 +46,7 @@ public class Explorer {
 			player.conditionsFinish = true;
 		}
 		
-		if(player.conditionsFinish && inputHandler.getInputOf(InputType.currentCellStatus) != WaypointType.FINISH) {
+		if(player.conditionsFinish && inputHandler.getInputOf(InputType.currentCellStatus) != WaypointType.FINISH) { //Erstellt und läuft zum Finish, wenn alle Siegeskonditionen erfüllt werden
 			System.err.println("Conditions Finished");
 			if(!pathLeadsToFinish) {
 				Waypoint finishWaypoint = null;
@@ -59,17 +59,23 @@ public class Explorer {
 				pathLeadsToFinish = true;
 			}
 			move();
-		} else if(finishDirection != null && !player.finishVisited) {
+		} else if(finishDirection != null && !player.finishVisited) { //Spieler versucht, wenn in Sichtweite und Finish noch unbekannt, dieses zu entdecken
 			player.move(finishDirection);
 			player.finishVisited = true;
-		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH && player.getFormsPickedUp() == world.formCountMin) {
+		} else if(player.getFormsPickedUp() < world.formCountMin && player.finishVisited && !pathLeadsToForm && world.forms.size() == world.formCountMin) { //Spieler erzeugt weg zum nächsten Formular
+			Waypoint nextForm = world.forms.get(player.getFormsPickedUp()+1); 
+			path = pathfinder.findPath(player.getPosition(), nextForm.position);
+			pathLeadsToForm = true;
+			move();
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FINISH && player.getFormsPickedUp() == world.formCountMin) { //Spieler versucht, Spiel zu beenden, wenn alle Forms eingesammelt wurden und dieser sich auf Finish befindet
 			player.finishGame();
-		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && inputHandler.getFormHere().formID == player.getFormsPickedUp()+1) {
+		} else if(inputHandler.getInputOf(InputType.currentCellStatus) == WaypointType.FORM && inputHandler.getFormHere().formID == player.getFormsPickedUp()+1) { //Spieler versucht, wenn er auf dem nächsten einsammelbaren Formular steht, dieses einzusammeln
 			player.pickUpForm();
+			world.worldMap.get(player.getPosition()).waypointType = WaypointType.FLOOR; //Wenn FORM aufgehoben wird, ist Spielzelle vom EnumType FLOOR
 			if(pathLeadsToForm) {
 				pathLeadsToForm = false;
 			}
-		} else {
+		} else { //Spieler bewegt sich, falls er keine bessere Alternative hat
 			move();
 		}
 			
@@ -90,7 +96,9 @@ public class Explorer {
 						Form form = inputHandler.getForm(direction);
 						world.addForm(form.formID, cell);
 					}
-					waypointQ.add(cell);
+					if(!waypointQ.contains(cell)) {
+						waypointQ.add(cell);						
+					}
 				}
 			}
 		}
@@ -106,10 +114,12 @@ public class Explorer {
 		for (Waypoint w : path) {
 			System.err.println(w.exploredByLooking);
 		}
+
+		if(!path.isEmpty()) {
+			Direction moveDirection = path.get(0).exploredByLooking;
+			player.move(moveDirection);
+		}
 		
-		Direction moveDirection = path.get(0).exploredByLooking;
-		//path.remove(0);
-		player.move(moveDirection);
 	}
 	
 	public void removeFirstWaypointFromPath() {

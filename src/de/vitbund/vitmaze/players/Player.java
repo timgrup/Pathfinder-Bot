@@ -93,7 +93,7 @@ public class Player {
 		this.position = position;
 	}
 	
-	public int getFormsPickedUp() {
+	public Integer getFormsPickedUp() {
 		return this.formsPickedUp;
 	}
 	
